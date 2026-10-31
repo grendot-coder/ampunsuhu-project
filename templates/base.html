@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ARSIP 17 // EDITORIAL{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header class="poster-header">
+        <div class="brand-mark">
+            <a href="{{ url_for('dashboard') }}" style="text-decoration: none; color: inherit;"
+                class="brand-title">SISTEM.67</a>
+            <span class="brand-tag">ARSIP SUPERSEMAR</span>
+        </div>
+        <nav class="poster-nav">
+            <a href="{{ url_for('dashboard') }}"
+                class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="{{ url_for('temperature') }}"
+                class="nav-link {% if request.endpoint == 'temperature' %}active{% endif %}">Suhu Udara</a>
+            {% if session.get('username') %}
+            <a href="{{ url_for('profile') }}"
+                class="nav-link {% if request.endpoint == 'profile' %}active{% endif %}">Profil</a>
+            <a href="{{ url_for('logout') }}" class="nav-link">Keluar</a>
+            {% else %}
+            <a href="{{ url_for('login') }}"
+                class="nav-link login-btn {% if request.endpoint == 'login' %}active{% endif %}">Masuk</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="main-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="poster-footer">
+        <div>TEMPERATURE // TUGAS EUY</div>
+        <div>DATA SUHU DIAMBIL DARI OPEN-METEO API</div>
+    </footer>
+</body>
+
+</html>

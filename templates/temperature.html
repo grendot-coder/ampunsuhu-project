@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}PANTAU (AMPUN)SUHU // {{ selected_city }}{% endblock %}
+
+{% block content %}
+<div class="meta-split">
+    <span>PANTAUAN ADMIN LOH YA</span>
+    <span>API CUACA REAL-TIME</span>
+    <span>KOTA: {{ selected_city | upper }}</span>
+</div>
+
+<div class="temp-hero-container">
+    <!-- Huge Typography Temperature Display -->
+    <div class="temp-huge-display">
+        <div class="temp-header-row">
+            <div>
+                <span class="editorial-tag temp-tag-contrast">SUHU SAAT INI</span>
+                <h1 class="temp-city-title">{{ weather.city }}</h1>
+            </div>
+            <span class="temp-status-badge">{{ weather.status }}</span>
+        </div>
+
+        <div class="temp-number-block">
+            <div class="huge-number temp-huge-num">{{ weather.temp }}<span class="temp-unit">°C</span></div>
+        </div>
+
+        <div class="temp-metrics-grid">
+            <div>
+                <div class="metric-label">TERASA SEPERTI</div>
+                <div class="metric-value">{{ weather.feels_like }}°C</div>
+            </div>
+            <div>
+                <div class="metric-label">KELEMBAPAN</div>
+                <div class="metric-value">{{ weather.humidity }}%</div>
+            </div>
+            <div>
+                <div class="metric-label">KECEPATAN ANGIN</div>
+                <div class="metric-value">{{ weather.wind }} km/j</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- City Selection & Info -->
+    <div class="temp-selector-card">
+        <span class="editorial-tag">CARI LOKASI // GLOBAL SENSOR</span>
+        <h3 class="temp-sidebar-title">Cari Kota di Dunia</h3>
+
+        <form method="GET" action="{{ url_for('temperature') }}" class="search-form-wrap">
+            <div class="search-input-group">
+                <input type="text" name="search" class="form-input search-box-input" placeholder="Ketik nama kota... (misal: Tokyo, London, Paris)" required>
+                <button type="submit" class="poster-button btn-search">Cari</button>
+            </div>
+        </form>
+
+        {% if error %}
+            <div class="auth-error-badge search-err">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <div style="margin-top: 1.5rem;">
+            <span class="editorial-tag">PILIHAN CEPAT</span>
+            <div class="city-pill-list">
+                {% for c in cities %}
+                <a href="{{ url_for('temperature', city=c) }}"
+                    class="city-pill {% if c == selected_city %}active{% endif %}">
+                    {{ c }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="temp-source-block">
+            <span class="editorial-tag">SUMBER DATA</span>
+            <p class="temp-source-text">
+                Data kondisi cuaca diambil secara real-time melalui <strong>Open-Meteo REST & Geocoding API</strong>.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

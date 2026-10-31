@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}RINGKASAN DASHBOARD // 17{% endblock %}
+
+{% block content %}
+<div class="meta-split">
+    <span>TUGAS WOY</span>
+    <span>2026 //// </span>
+    <span>STATUS: NORMAL</span>
+</div>
+
+<div class="color-grid-quad">
+    <!-- Quad 1: Orange - System Number & Weather Quick Peek -->
+    <div class="quad-panel panel-orange">
+        <div class="editorial-tag editorial-tag-contrast">MODUL UTAMA</div>
+        <div class="huge-number">6</div>
+        <div>
+            <h3>SISTEM AKTIF</h3>
+            <p class="quote">"Ambatublow."</p>
+        </div>
+    </div>
+
+    <!-- Quad 2: Teal - Live Temp Quick Stat -->
+    <div class="quad-panel panel-teal">
+        <div class="editorial-tag editorial-tag-contrast">WEATHER ******// SUMBERPUCUNG</div>
+        <div class="huge-number">{{ weather.temp }}°</div>
+        <div>
+            <h3>{{ weather.status }}</h3>
+            <p class="quote">Kelembapan {{ weather.humidity }}% // Angin {{ weather.wind }} km/jam</p>
+        </div>
+    </div>
+
+    <!-- Quad 3: Yellow - Identity Profile -->
+    <div class="quad-panel panel-yellow">
+        <div class="editorial-tag">PROFIL PENGGUNA</div>
+        <div class="user-status-text">
+            {% if session.get('username') %}
+            AKTIF: @{{ session['username'] }}
+            {% else %}
+            GUEST (BELUM MASUK)
+            {% endif %}
+        </div>
+        <div>
+            <h3>IDENTITAS</h3>
+            <p class="quote">
+                {% if session.get('username') %}
+                Sesi terverifikasi. Admin Datang😨
+                {% else %}
+                Masuk akun dulu wok.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Quad 4: Pink - System Architecture -->
+    <div class="quad-panel panel-pink">
+        <div class="editorial-tag editorial-tag-contrast">INTEGRASI API</div>
+        <div class="huge-number panel-sub-number">REST</div>
+        <div>
+            <h3>OPEN METEO</h3>
+            <p class="quote">Data cuaca diambil secara real-time via API Open-Meteo.</p>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-bottom-bar">
+    <a href="{{ url_for('temperature') }}" class="poster-button btn-inline">Cek Suhu Lengkap &rarr;</a>
+    <span class="dashboard-footnote">INSPIRASI DARI DESAIN POSTER PINTEREST :V</span>
+</div>
+{% endblock %}

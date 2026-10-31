@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}PROFIL PENGGUNA // {{ user.name }}{% endblock %}
+
+{% block content %}
+<div class="meta-split">
+    <span>DATA PENGGUNA</span>
+    <span>STATUS AKSES: AKTIF</span>
+    <span>ID: {{ user.badge }}</span>
+</div>
+
+<div class="poster-card">
+    <div class="profile-grid">
+        <!-- Left Portrait box -->
+        <div class="profile-badge-card">
+            <div class="huge-number profile-avatar-num">17</div>
+            <div class="profile-name">{{ user.name }}</div>
+            <div class="profile-badge-tag">{{ user.badge }}</div>
+        </div>
+
+        <!-- Right User details -->
+        <div>
+            <span class="editorial-tag">INFO & DETAIL PENGGUNA</span>
+            <h2 class="profile-title">DATA TERVERIFIKASI</h2>
+
+            <table class="profile-table">
+                <tr>
+                    <td class="label-cell">NAMA LENGKAP:</td>
+                    <td class="val-cell">{{ user.name }}</td>
+                </tr>
+                <tr>
+                    <td class="label-cell">PERAN / JABATAN:</td>
+                    <td class="val-cell">{{ user.role }}</td>
+                </tr>
+                <tr>
+                    <td class="label-cell">LOKASI ASAL:</td>
+                    <td class="val-cell">{{ user.location }}</td>
+                </tr>
+                <tr>
+                    <td class="label-cell">KONTAK EMAIL:</td>
+                    <td class="val-cell">{{ user.email }}</td>
+                </tr>
+            </table>
+
+            <div class="profile-actions">
+                <a href="{{ url_for('dashboard') }}" class="poster-button">Ke Dashboard &rarr;</a>
+                <a href="{{ url_for('logout') }}" class="poster-button btn-signout">Keluar (Logout)</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

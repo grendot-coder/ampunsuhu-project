@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}MASUK AKUN // SISTEM.17{% endblock %}
+
+{% block content %}
+<div class="meta-split">
+    <span>AKSES PENGGUNA</span>
+    <span>PERLU LOGIN TERLEBIH DAHULU</span>
+    <span>PORT: 5000</span>
+</div>
+
+<div class="auth-box-wrapper">
+    <div class="poster-card">
+        <div class="auth-header-row">
+            <span class="editorial-tag">FORM MASUK</span>
+            <span class="badge-secure">AMAN</span>
+        </div>
+        <h2 class="auth-card-title">LOGIN PENGGUNA</h2>
+        
+        {% if error %}
+            <div class="auth-error-badge">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('login') }}" class="poster-form">
+            <div class="form-group">
+                <label class="form-label">USERNAME</label>
+                <input type="text" name="username" class="form-input" placeholder="contoh: admin" required autofocus>
+            </div>
+            <div class="form-group">
+                <label class="form-label">KATA SANDI (PASSWORD)</label>
+                <input type="password" name="password" class="form-input" placeholder="••••••••" required>
+            </div>
+            <div style="margin-top: 2rem;">
+                <button type="submit" class="poster-button btn-full">MASUK SEKARANG &rarr;</button>
+            </div>
+        </form>
+
+        <div class="auth-hint-footer">
+            AKUN UJI COBA:<br>
+            Username: <strong>admin</strong> | Password: <strong>1234</strong>
+        </div>
+    </div>
+</div>
+{% endblock %}
