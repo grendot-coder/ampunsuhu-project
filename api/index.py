@@ -7,33 +7,28 @@ sys.path.append(root_dir)
 
 from project import app
 
-# Explicitly configure template and static folders for Vercel's serverless environment
+# Explicitly configure template and static folders for Vercel
 app.template_folder = os.path.join(root_dir, 'templates')
 app.static_folder = os.path.join(root_dir, 'static')
 
-# WSGI Middleware to restore the real requested URL when Vercel rewrites to /api/index
-class VercelPathMiddleware:
+# WSGI Middleware to fix URL prefixing & routing on Vercel
+class VercelPrefixMiddleware:
     def __init__(self, wsgi_app):
         self.wsgi_app = wsgi_app
 
     def __call__(self, environ, start_response):
-        matched_path = (
-            environ.get('HTTP_X_MATCHED_PATH')
-            or environ.get('HTTP_X_VERCEL_PATH')
-            or environ.get('HTTP_X_FORWARDED_PATH')
-            or environ.get('HTTP_X_FORWARDED_URI')
-        )
-        if matched_path and matched_path != '/api/index':
-            environ['PATH_INFO'] = matched_path.split('?')[0]
-        elif environ.get('PATH_INFO') == '/api/index':
-            environ['PATH_INFO'] = '/'
+        # Reset SCRIPT_NAME so url_for generates clean URLs without /api/index prefix
+        environ['SCRIPT_NAME'] = ''
+
+        # Strip /api/index or /api prefix from PATH_INFO if Vercel appended it
+        path = environ.get('PATH_INFO', '')
+        if path.startswith('/api/index'):
+            path = path[len('/api/index'):] or '/'
+            environ['PATH_INFO'] = path
+        elif path.startswith('/api'):
+            path = path[len('/api'):] or '/'
+            environ['PATH_INFO'] = path
 
         return self.wsgi_app(environ, start_response)
 
-app.wsgi_app = VercelPathMiddleware(app.wsgi_app)
-
-# Fallback route in case /api/index is called directly
-@app.route('/api/index')
-def vercel_entry_fallback():
-    from flask import redirect, url_for
-    return redirect(url_for('dashboard'))
+app.wsgi_app = VercelPrefixMiddleware(app.wsgi_app)

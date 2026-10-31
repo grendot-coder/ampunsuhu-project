@@ -95,9 +95,6 @@ def search_city_coordinates(query):
     return None, None, None
 
 @app.route('/')
-def index():
-    return redirect(url_for('dashboard'))
-
 @app.route('/dashboard')
 def dashboard():
     weather = get_weather_data('Sumberpucung', -8.1567, 112.4831)
