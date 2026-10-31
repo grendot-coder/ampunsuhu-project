@@ -1,5 +1,6 @@
 import os
 import sys
+from flask import send_from_directory
 
 # Ensure root directory is on the Python path
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -7,9 +8,13 @@ sys.path.append(root_dir)
 
 from project import app
 
-# Explicitly configure template and static folders for Vercel
-app.template_folder = os.path.join(root_dir, 'templates')
-app.static_folder = os.path.join(root_dir, 'static')
+# Determine static and template directories
+api_dir = os.path.dirname(os.path.abspath(__file__))
+static_dir = os.path.join(api_dir, 'static') if os.path.exists(os.path.join(api_dir, 'static')) else os.path.join(root_dir, 'static')
+template_dir = os.path.join(root_dir, 'templates')
+
+app.static_folder = static_dir
+app.template_folder = template_dir
 
 # WSGI Middleware to fix URL prefixing & routing on Vercel
 class VercelPrefixMiddleware:
@@ -32,3 +37,8 @@ class VercelPrefixMiddleware:
         return self.wsgi_app(environ, start_response)
 
 app.wsgi_app = VercelPrefixMiddleware(app.wsgi_app)
+
+# Explicit route to ensure static files (CSS/JS) are always served on Vercel
+@app.route('/static/<path:filename>')
+def serve_static_assets(filename):
+    return send_from_directory(static_dir, filename)

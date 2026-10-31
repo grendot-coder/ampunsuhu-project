@@ -1,12 +1,16 @@
 {
   "functions": {
     "api/index.py": {
-      "includeFiles": "{templates/**,static/**,project.py}"
+      "includeFiles": "{templates/**,static/**,api/static/**,project.py}"
     }
   },
   "rewrites": [
     {
-      "source": "/((?!static/).*)",
+      "source": "/static/(.*)",
+      "destination": "/api/index/static/$1"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/api/index"
     }
   ]
